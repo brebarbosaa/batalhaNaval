@@ -1,11 +1,13 @@
 import random
 
 def criarTabuleiro():
-    return [['0' for _ in range(10)] for _ in range(10)]
+    return [['🌊' for _ in range(10)] for _ in range(10)]
 
-def imprimir_tabuleiro(tabuleiro):
+def imprimir_tabuleiro(tabuleiro, titulo):
+    print(titulo)
     for linha in tabuleiro:
         print(" ".join(linha))
+    print()
 
 def coordenadasUsuario():
     while True:
@@ -19,79 +21,120 @@ def coordenadasUsuario():
         except ValueError:
             print("Por favor, digite números inteiros. Tente novamente.")
 
-def ataqueJogador():
-    while True:
-        try:
-            ataqueX = int(input("Qual linha quer atacar? digite um número (0-9): "))
-            ataqueY = int(input("Qual coluna quer atacar? digite um número (0-9): "))
-            if 0 <= ataqueX < 10 and 0 <= ataqueY < 10:
-                return ataqueX, ataqueY
-            else:
-                print("Os valores devem estar entre 0 e 9, por favor tente novamente.")
-        except ValueError:
-            print("Por favor, digite números inteiros. Tente novamente.")
-
 def embarcacoesPosicionadas(tabuleiro, x, y):
-    if tabuleiro[x][y] == '0':
-        tabuleiro[x][y] = 'X'
+    if tabuleiro[x][y] == '🌊':
+        tabuleiro[x][y] = '🚢'
         return True
     else:
         print("Essa posição já está ocupada por uma embarcação. Tente novamente.")
         return False
-    
-def tabuleiroAmostra():
-    print("Tabuleiro do Computador")
-    tabuleiro = [[0 for _ in range(10)] for _ in range(10)]
-    for linha in tabuleiro:
-        print(linha)
 
-tabuleiroAmostra()
+def ataqueJogador():
+    while True:
+        try:
+            ataqueX = int(input("Qual linha quer atacar? Digite um número (0-9): "))
+            ataqueY = int(input("Qual coluna quer atacar? Digite um número (0-9): "))
+            if 0 <= ataqueX < 10 and 0 <= ataqueY < 10:
+                return ataqueX, ataqueY
+            else:
+                print("Os valores devem estar entre 0 e 9. Por favor, tente novamente.")
+        except ValueError:
+            print("Por favor, digite números inteiros. Tente novamente.")
 
-# Função para criar tabuleiro 10x10 com embarcações em posições aleatórias
+def ataqueComputador(tabuleiro, ataques_feitos):
+    while True:
+        ataqueX = random.randint(0, 9)
+        ataqueY = random.randint(0, 9)
+        if (ataqueX, ataqueY) not in ataques_feitos:
+            ataques_feitos.append((ataqueX, ataqueY))
+            break
+
+    if tabuleiro[ataqueX][ataqueY] == '🚢':
+        print(f"O computador atacou a posição ({ataqueX}, {ataqueY}) e acertou uma embarcação sua!")
+        tabuleiro[ataqueX][ataqueY] = '🎯'  # marca como 'A' para indicar que acertou
+        return True
+    else:
+        print(f"O computador atacou a posição ({ataqueX}, {ataqueY}) e não acertou nenhuma embarcação sua.")
+        tabuleiro[ataqueX][ataqueY] = '👎'  # marca como 'M' para indicar que errou
+        return False
+
 def tabuleiroEscondido():
-    tabuleiro = [[0 for _ in range(10)] for _ in range(10)]
-    for _ in range(10):
+    tabuleiro = [['🌊' for _ in range(10)] for _ in range(10)]
+    for _ in range(5):
         linha = random.randint(0, 9)  # gera um número aleatório de 0 a 9 para a coordenada x
         coluna = random.randint(0, 9)  # gera um número aleatório de 0 a 9 para a coordenada y
-        if tabuleiro[linha][coluna] == 0:
-            tabuleiro[linha][coluna] = 'X'
-            break
-    # for linha in tabuleiro:
-    #         print(linha)
+        if tabuleiro[linha][coluna] == '🌊':
+            tabuleiro[linha][coluna] = '🚢'
+    return tabuleiro
 
+def tabuleiroAmostra(tabuleiro):
+    print("Tabuleiro do Computador")
+    tabuleiro_visivel = [[c if c in ['🎯', '👎'] else '🌊' for c in linha] for linha in tabuleiro]
+    for linha in tabuleiro_visivel:
+        print(" ".join(linha))
+    print()
 
 def main():
     embarcacoes = 5
-    tabuleiroJogador = criarTabuleiro()
-    tabuleiroComputador = criarTabuleiro()
+    acertos_jogador = 0
+    acertos_computador = 0
 
-    print("Seja bem vindo ao Batalha Naval!")
+    tabuleiroJogador = criarTabuleiro()
+    tabuleiroComputador = tabuleiroEscondido()
+
+    print("Seja bem-vindo ao Batalha Naval!")
+    print("Posicione suas embarcações:")
 
     for _ in range(embarcacoes):
-        imprimir_tabuleiro(tabuleiroJogador) ## mudar pra tabuleiro escondido
+        imprimir_tabuleiro(tabuleiroJogador, "Tabuleiro do Jogador")
         while True:
             x, y = coordenadasUsuario()
             if embarcacoesPosicionadas(tabuleiroJogador, x, y):
                 break
 
-    tabuleiroEscondido()
+    print("Agora é a vez de atacar o tabuleiro do computador. Boa sorte!")
 
-    ## mudar pra tabuleiro escondido
-    ## modo ataque jogador
-    print("agora é a vez de atacar o tabuleiro do computador, boa sorte!")
+    ataques_feitos = []
 
-    while True:
+    embarcacoes_restantes_jogador = embarcacoes
+    embarcacoes_restantes_computador = embarcacoes
+
+    while acertos_jogador < embarcacoes and acertos_computador < embarcacoes:
+        tabuleiroAmostra(tabuleiroComputador)
         x, y = ataqueJogador()
-        if tabuleiroComputador[x][y] == 'X':
-            print("parabéns! você acertou uma embarcação do computador!")
-            ## mudar a coordenada do tabuleiro do computador para 'A' quando a embarcação for afundada
-            tabuleiroComputador[x][y] = 'A'
-            break
+        if tabuleiroComputador[x][y] == '🚢':
+            print("Parabéns! Você acertou uma embarcação do computador!")
+            tabuleiroComputador[x][y] = '🎯'  # marca como 'A' para indicar que afundou
+            acertos_jogador += 1
+            embarcacoes_restantes_computador -= 1
         else:
-            print("você não acertou nenhuma embarcação do computador :( tente novamente!")
+            print("Você não acertou nenhuma embarcação do computador. Tente novamente!")
 
-## fazer uma variavel para poder printar no final quem ganhou
-## ex: se o computador ganhou = computadorGanhou
-    print("fim de jogo! ")
+        imprimir_tabuleiro(tabuleiroJogador, "Seu Tabuleiro")
+        print(f"Embarcações restantes do jogador: {embarcacoes_restantes_jogador}")
+        print(f"Embarcações restantes do computador: {embarcacoes_restantes_computador}")
+        print()
+
+        if acertos_jogador >= embarcacoes:
+            break
+
+        # Ataque do computador
+        print("Agora é a vez do computador atacar o seu tabuleiro...")
+        if ataqueComputador(tabuleiroJogador, ataques_feitos):
+            acertos_computador += 1
+            embarcacoes_restantes_jogador -= 1
+
+        imprimir_tabuleiro(tabuleiroJogador, "Seu Tabuleiro")
+        print(f"Embarcações restantes do jogador: {embarcacoes_restantes_jogador}")
+        print(f"Embarcações restantes do computador: {embarcacoes_restantes_computador}")
+        print()
+
+    if acertos_jogador >= embarcacoes:
+        print("Parabéns! Você venceu o jogo!")
+    else:
+        print("O computador venceu o jogo. Melhor sorte da próxima vez!")
+
+    print("Fim de jogo!")
+
 if __name__ == "__main__":
     main()
