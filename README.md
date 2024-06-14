@@ -21,8 +21,12 @@ o tabuleiro do jogo possui emojis que deixam a interface mais intuitiva e clara 
 
 
 ミ★ legenda ★彡: 
+🎯: ataques acertados
+🚢: embarcações posicionadas
+👎: ataques errados
+🌊: água
 
-<img src="tabuleiro.png" width="280" height="200">
+<img src="tabuleiroMarcado.png" width="280" height="200">
 
 
 
