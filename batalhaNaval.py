@@ -33,13 +33,16 @@ def embarcacoesPosicionadas(tabuleiro, x, y):
         return False
 
 ## logica de ataque do jogador
-def ataqueJogador():
+def ataqueJogador(tabuleiro):
     while True:
         try:
             ataqueX = int(input("Qual linha quer atacar? Digite um número (0-9): "))
             ataqueY = int(input("Qual coluna quer atacar? Digite um número (0-9): "))
             if 0 <= ataqueX < 10 and 0 <= ataqueY < 10:
-                return ataqueX, ataqueY
+                if tabuleiro[ataqueX][ataqueY] in ['🎯','👎']:
+                    print("essa posição já foi atacada, tente novamente")
+                else:
+                    return ataqueX, ataqueY
             else:
                 print("Os valores devem estar entre 0 e 9. Por favor, tente novamente.")
         except ValueError:
@@ -62,7 +65,7 @@ def ataqueComputador(tabuleiro, ataques_feitos):
         print(f"O computador atacou a posição ({ataqueX}, {ataqueY}) e não acertou nenhuma embarcação sua.")
         tabuleiro[ataqueX][ataqueY] = '👎'  # marca como 'M' para indicar que errou
         return False
-        
+    
 ## Função para criar o tabuleiro do computador com as embarcações escondidas
 def tabuleiroEscondido():
     tabuleiro = [['🌊' for _ in range(10)] for _ in range(10)]
@@ -87,15 +90,13 @@ def main():
     acertos_jogador = 0 # contador de acertos do jogador
     acertos_computador = 0 # contador de acertos do computador
 
-
     tabuleiroJogador = criarTabuleiro() # cria o tabuleiro do jogador
     tabuleiroComputador = tabuleiroEscondido() # cria o tabuleiro do computador com embarcações escondidas
 
-
     print("​(っ◔◡◔)っ ♥ 𝔹̲𝔼̲𝕄̲  𝕍̲𝕀̲ℕ̲𝔻̲𝕆̲  𝔸̲𝕆̲  𝔹̲𝔸̲𝕋̲𝔸̲𝕃̲ℍ̲𝔸̲ ℕ̲𝔸̲𝕍̲𝔸̲𝕃̲ ♥")
-    print("Posicione suas embarcações:")
-    
-   ## Posiciona as embarcações do jogador
+    print(" Posicione suas embarcações:")
+
+    # posiciona as embarcações do jogador
     for _ in range(embarcacoes):
         imprimir_tabuleiro(tabuleiroJogador, "Tabuleiro do Jogador")
         while True:
@@ -113,13 +114,13 @@ def main():
     ## Loop principal do jogo, continua enquanto houver embarcações para serem acertadas por ambos os lados
     while acertos_jogador < embarcacoes and acertos_computador < embarcacoes:
         tabuleiroAmostra(tabuleiroComputador) # mostra o tabuleiro do computador com os resultados dos ataques
-        x, y = ataqueJogador() # jogador realiza um ataque
-        ## Verifica se acertou uma embarcação do computador
+        x, y = ataqueJogador(tabuleiroComputador) # jogador realiza um ataque
+        # verifica se o ataqque do jogador acertou uma embarcação do computador
         if tabuleiroComputador[x][y] == '🚢':
             print(f"Parabéns! Você atacou a linha {x} e a coluna {y} e acertou uma embarcação do computador!")
             tabuleiroComputador[x][y] = '🎯' 
             acertos_jogador += 1
-            embarcacoes_restantes_computador -= 1 ## Verifica se acertou uma embarcação do computador
+            embarcacoes_restantes_computador -= 1
         else:
             print(f"Você atacou a linha {x} e a coluna {y} e não acertou nenhuma embarcação do computador. Tente novamente!")
             tabuleiroComputador[x][y] = '👎' 
@@ -127,7 +128,7 @@ def main():
 
         imprimir_tabuleiro(tabuleiroJogador, "Seu Tabuleiro") # imprime o tabuleiro atualizado do jogador
 
-        ## Verifica se o jogador já destruiu todas as embarcações do computador    
+        # verifica se o jogador já destruiu todas as embarcações do computador
         if acertos_jogador >= embarcacoes:
             break
 
@@ -143,7 +144,8 @@ def main():
         print()
         print(".・。.・゜✭・.・✫・゜・。.")
 
-    ## Verifica o resultado do jogo (se o jogador ou o computador destruíram todas as embarcações do adversário)
+
+    # verifica o resultado do jogo (se o jogador ou o computador destruiram todas as embarcações do adversário)
     if acertos_jogador >= embarcacoes:
         print("Parabéns! Você venceu o jogo!")
     else:
