@@ -144,6 +144,8 @@ def main():
         print("O computador venceu o jogo. Melhor sorte da próxima vez!")
 
     print("Fim de jogo!")
+    print("Obrigada por jogar nosso jogo! 💫")
+    print("Desenvolvido por: Alana Queiroz ♡ e Brenda Barbosa ♡")
 
 if __name__ == "__main__":
     main()
