@@ -88,7 +88,7 @@ def main():
     tabuleiroJogador = criarTabuleiro()
     tabuleiroComputador = tabuleiroEscondido()
 
-    print("​(っ◔◡◔)っ ♥ bem vindo ao batalha naval! ♥")
+    print("​(っ◔◡◔)っ ♥ 𝔹̲𝔼̲𝕄̲  𝕍̲𝕀̲ℕ̲𝔻̲𝕆̲  𝔸̲𝕆̲  𝔹̲𝔸̲𝕋̲𝔸̲𝕃̲ℍ̲𝔸̲ ℕ̲𝔸̲𝕍̲𝔸̲𝕃̲ ♥")
     print("Posicione suas embarcações:")
 
     for _ in range(embarcacoes):
@@ -116,13 +116,9 @@ def main():
         else:
             print(f"Você atacou a linha {x} e a coluna {y} e não acertou nenhuma embarcação do computador. Tente novamente!")
             tabuleiroComputador[x][y] = '👎' 
-            imprimir_tabuleiro(tabuleiroComputador, "tab comp")
     
 
         imprimir_tabuleiro(tabuleiroJogador, "Seu Tabuleiro")
-        print(f"Embarcações restantes do jogador: {embarcacoes_restantes_jogador}")
-        print(f"Embarcações restantes do computador: {embarcacoes_restantes_computador}")
-        print()
 
         if acertos_jogador >= embarcacoes:
             break
@@ -137,6 +133,7 @@ def main():
         print(f"Embarcações restantes do jogador: {embarcacoes_restantes_jogador}")
         print(f"Embarcações restantes do computador: {embarcacoes_restantes_computador}")
         print()
+        print(".・。.・゜✭・.・✫・゜・。.")
 
     if acertos_jogador >= embarcacoes:
         print("Parabéns! Você venceu o jogo!")
@@ -146,6 +143,7 @@ def main():
     print("Fim de jogo!")
     print("Obrigada por jogar nosso jogo! 💫")
     print("Desenvolvido por: Alana Queiroz ♡ e Brenda Barbosa ♡")
+    print(".・。.・゜✭・.・✫・゜・。.")
 
 if __name__ == "__main__":
     main()
