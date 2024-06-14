@@ -20,7 +20,9 @@ o tabuleiro do jogo possui emojis que deixam a interface mais intuitiva e clara 
 
 
 
-ミ★ legenda ★彡:
+ミ★ legenda ★彡: 
+
+<img src="tabuleiro.png" width="280" height="200">
 
 
 
